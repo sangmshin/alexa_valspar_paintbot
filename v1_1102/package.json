@@ -1,0 +1,14 @@
+{
+  "name": "DecisionTree",
+  "version": "1.0.0",
+  "description": "Alexa Decision Tree template",
+  "main": "index.js",
+  "dependencies": {
+    "alexa-sdk": "^1.0.14",
+    "file-system": "^2.2.2",
+    "gulp": "^3.9.1"
+  },
+  "devDependencies": {},
+  "author": "Amazon.com",
+  "license": "SEE LICENSE IN license.md"
+}
