@@ -294,14 +294,13 @@ var askQuestionHandlers = Alexa.CreateStateHandler(states.ASKMODE, {
     this.handler.state = states.ASKMODE;
 
     const token = this.event.request.token; // the token of 
-    // this.emit(':tell', 'you clicked on an element with token ' + token);
-    // this.response.speak('You selected Home 1');
 
-    if (yesIntent_usage == 0) {
-      this.emit('HomeOne_Intent')
-    } else if (yesIntent_usage == 1) {
-      this.emit('Strawberry_Intent')
-    }
+    yesIntent_usage == 0
+    ? this.emit('HomeOne_Intent')
+    : yesIntent_usage == 1
+    ? this.emit('Strawberry_Intent')
+    : null
+    
   },
 
   'AMAZON.NoIntent': function () {
@@ -330,204 +329,19 @@ var askQuestionHandlers = Alexa.CreateStateHandler(states.ASKMODE, {
     var say = "I am sorry. I did not quite get that. Can you try saying that again please?";
     this.response.speak(say).listen(say);
     this.emit(':responseReady');
-  },
+  }
 
 
-  /*   'AMAZON.StartOverIntent': function () {
-      // reset the game state to start mode
-      this.handler.state = states.STARTMODE;
-      this.emit(':ask', welcomeMessage, repeatWelcomeMessage);
-    } */
 });
 
-/* 
-const handlers = {
-  'LaunchRequest': function () {
-
-    yesIntent_usage = 0;
-
-    const builder = new Alexa.templateBuilders.BodyTemplate1Builder();
-
-    let template = builder.setBackgroundImage(makeImage('https://s3.amazonaws.com/deutscherlookup/welcome_bg.jpg')).setBackButtonBehavior("HIDDEN").build();
-
-    var say = "Okay, what are you painting?";
-    this.response.speak(say).listen(say).renderTemplate(template);
-    this.emit(':responseReady');
-
-  },
-
-  'Kitchen_Intent': function () {
-
-    const builder = new Alexa.templateBuilders.BodyTemplate3Builder();
-
-    let template = builder.setBackgroundImage(makeImage('https://s3.amazonaws.com/deutscherlookup/welcome_bg.jpg')).setBackButtonBehavior("HIDDEN").build();
-
-    var say = 'Let’s find the right paint. Choosing a paint depends on the painter. Okay, when you’re starting a project, do you <emphasis level="strong">Jump </emphasis>right in, or would you rather hide under the bed?';
-
-    this.response.speak(say).listen(say).renderTemplate(template);
-
-    this.emit(':responseReady');
-  },
-
-  'JumpRightIn_Intent': function () {
-
-    const builder = new Alexa.templateBuilders.BodyTemplate3Builder();
-
-    let template = builder.setBackgroundImage(makeImage('https://s3.amazonaws.com/deutscherlookup/welcome_bg.jpg')).setBackButtonBehavior("HIDDEN").build();
-
-    var say = 'Okay, do you know what you want your room to look like?';
-
-    this.response.speak(say).listen(say).renderTemplate(template);
-
-    this.emit(':responseReady');
-  },
-
-  'AMAZON.YesIntent': function () {
-
-    const builder = new Alexa.templateBuilders.BodyTemplate1Builder();
-
-    let template = builder.setBackgroundImage(makeImage('https://s3.amazonaws.com/deutscherlookup/unique_calm.jpg')).setBackButtonBehavior("HIDDEN").build();
-
-    var say = '<prosody volume="x-loud">Got it.</prosody> And do you want your home to feel unique? Or coordinated.';
-
-    if (yesIntent_usage == 0) {
-
-      this.response.speak(say).listen(say).renderTemplate(template);
-
-
-    } else if (yesIntent_usage == 1) {
-
-      var content = {
-        "hasDisplaySpeechOutput": "Here you go. Pick one.",
-        "hasDisplayRepromptText": "Here you go. Pick one.",
-        "screenTitle": "HGTV + Valspar Paintbot",
-        "simpleCardTitle": 'HGTV + Valspar',
-        "templateToken": "colorImages",
-        "askOrTell": ":ask",
-        "sessionAttributes": {"STATE": "_ASKMODE"}
-      };
-
-      renderTemplate.call(this, content);
-
-    } else if (yesIntent_usage == 2) {
-
-      say = '<prosody volume="x-loud">Great.</prosody> You can find it at Lowes. Here’s the closest one. I just texted you the address. Would you like a coupon too?';
-      template = builder.setBackgroundImage(makeImage('https://s3.amazonaws.com/deutscherlookup/lowes.jpg')).setBackButtonBehavior("HIDDEN").build();
-
-      yesIntent_usage = 3;
-      this.response.speak(say).listen(say).renderTemplate(template);
-
-    } else if (yesIntent_usage == 3) {
-
-      say = '<prosody volume="x-loud">Oh,</prosody> one last thing. You’ll find Valspar in aisle five. Now go out there and get painting.';
-      template = builder.setBackgroundImage(makeImage('https://s3.amazonaws.com/deutscherlookup/coupon.jpg')).setBackButtonBehavior("HIDDEN").build();
-
-      yesIntent_usage = 0;
-      this.response.speak(say).renderTemplate(template);
-
-    }
-
-    this.emit(':responseReady');
-
-  },
-
-  'Unique_Intent': function () {
-
-    var content = {
-      "hasDisplaySpeechOutput": "Good choice. Last question. Take a look at the screen — which one makes you smile?",
-      "hasDisplayRepromptText": "Take a look at the screen — which one makes you smile?",
-      "screenTitle": "HGTV + Valspar Paintbot",
-      "simpleCardTitle": 'HGTV + Valspar',
-      "templateToken": "homeImages",
-      "askOrTell": ":ask",
-      "sessionAttributes": {"STATE": "_ASKMODE"}
-    };
-
-    renderTemplate.call(this, content);
-
-  },
-
-
-  'HomeOne_Intent': function () {
-
-    const builder = new Alexa.templateBuilders.BodyTemplate1Builder();
-
-    let template = builder.setBackgroundImage(makeImage('https://s3.amazonaws.com/deutscherlookup/home1_fullscreen.jpg')).setBackButtonBehavior("HIDDEN").build();
-
-    var say = '<emphasis level="strong">Nice!</emphasis> It looks like you’re a Rebel with a Roller. You don’t follow trends, you make your own. - Valspar seems right for you. Would you like to see some color palettes from Valspar?';
-
-    yesIntent_usage = 1;
-
-    this.response.speak(say).listen(say).renderTemplate(template);
-    this.emit(':responseReady');
-  },
-
-  'Strawberry_Intent': function () {
-
-    const builder = new Alexa.templateBuilders.BodyTemplate1Builder();
-
-    let template = builder.setTitle('Whipped Strawberry').setBackgroundImage(makeImage('https://s3.amazonaws.com/deutscherlookup/strawberry.jpg')).setTextContent(makePlainText('Would you like to buy this?')).setBackButtonBehavior("HIDDEN").build();
-
-    var say = '<emphasis level="strong">Whipped Strawberry.</emphasis> Whipped Strawberry. Sounds delicious. Would you like to buy this?';
-
-    yesIntent_usage = 2;
-
-    this.response.speak(say).listen(say).renderTemplate(template);
-    this.emit(':responseReady');
-  },
-
-
-  'ElementSelected': function () {
-    const token = this.event.request.token; // the token of 
-    // this.emit(':tell', 'you clicked on an element with token ' + token);
-    // this.response.speak('You selected Home 1');
-
-    if (yesIntent_usage == 0) {
-      this.emit('HomeOne_Intent')
-    } else if (yesIntent_usage == 1) {
-      this.emit('Strawberry_Intent')
-    }
-  },
-
-
-  'AMAZON.NoIntent': function () {
-    this.emit('AMAZON.StopIntent');
-  },
-  'AMAZON.HelpIntent': function () {
-    this.response.speak(this.t('HELP')).listen(this.t('HELP'));
-    this.emit(':responseReady');
-  },
-  'AMAZON.CancelIntent': function () {
-    this.response.speak(this.t('STOP'));
-    this.emit(':responseReady');
-  },
-  'AMAZON.StopIntent': function () {
-    this.emit('SessionEndedRequest');
-  },
-  'SessionEndedRequest': function () {
-    this.response.speak(this.t('STOP'));
-    this.emit(':responseReady');
-  },
-  'Unhandled': function () {
-    // this.attributes.speechOutput = this.t('HELP_MESSAGE');
-    // this.attributes.repromptSpeech = this.t('HELP_REPROMPT');
-    this.response.speak("WHAT?").listen("WAHT");
-    this.emit(':responseReady');
-  },
-
-};
- */
 //    END of Intent Handlers {} ========================================================================================
 // 3. Helper Function  =================================================================================================
 
 function getRestaurantsByMeal(mealtype) {
 
-  var list = [];
-  for (var i = 0; i < data.restaurants.length; i++) {
-
-    if (data.restaurants[i].meals.search(mealtype) > -1) {
-      list.push(data.restaurants[i]);
-    }
+  var list = data.restaurants.map( rest => {
+    rest.meals.search(mealtype) > -1
+    && rest
   }
   return list;
 }
@@ -546,13 +360,9 @@ function getRestaurantByName(restaurantName) {
 
 function getAttractionsByDistance(maxDistance) {
 
-  var list = [];
-
-  for (var i = 0; i < data.attractions.length; i++) {
-
-    if (parseInt(data.attractions[i].distance) <= maxDistance) {
-      list.push(data.attractions[i]);
-    }
+  var list = data.attractions.map( attr => {
+    parseInt(attr.distance) <= maxDistance
+    && attr
   }
   return list;
 }
